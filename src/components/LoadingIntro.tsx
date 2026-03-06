@@ -45,7 +45,7 @@ const LoadingIntro = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.34, ease }}
         >
-          beep boop, bleh
+          bleep bloop, bleh
         </motion.p>
 
         <motion.div
