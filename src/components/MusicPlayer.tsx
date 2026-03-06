@@ -95,7 +95,6 @@ const NextIcon = () => (
 const MusicPlayer = ({
   initialTrack = 0,
   tracksOverride,
-  hideTrackList = false,
 }: MusicPlayerProps) => {
   const tracks = tracksOverride && tracksOverride.length > 0 ? tracksOverride : defaultTracks;
   const safeInitialTrack =
@@ -208,7 +207,7 @@ const MusicPlayer = ({
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <span className="music-badge">{playing ? "now playing" : "paused"}</span>
+              <span className="music-badge">{playing ? "now playing" : "loaded"}</span>
             </div>
 
             <p className="text-lg font-semibold truncate text-foreground soft-display">
@@ -285,30 +284,6 @@ const MusicPlayer = ({
           </div>
         </div>
       </div>
-
-      {!hideTrackList && (
-        <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
-          {tracks.map((t, i) => (
-            <button
-              key={i}
-              onClick={() => switchTrack(i)}
-              className={`music-pill ${
-                i === current ? "music-pill-active" : ""
-              }`}
-            >
-              <img src={t.cover} alt={t.title} className="w-8 h-8 rounded-lg object-cover" />
-              <div className="text-left min-w-0">
-                <p className="text-[11px] font-medium text-foreground truncate max-w-[96px]">
-                  {t.title}
-                </p>
-                <p className="text-[10px] text-muted-foreground truncate max-w-[96px]">
-                  {t.artist}
-                </p>
-              </div>
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   );
 };
