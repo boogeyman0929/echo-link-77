@@ -4,10 +4,12 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import Index from "./pages/Index";
 import Vale from "./pages/Vale";
 import Suicidal from "./pages/Suicidal";
 import NotFound from "./pages/NotFound";
+import LoadingIntro from "./components/LoadingIntro";
 
 const queryClient = new QueryClient();
 
@@ -41,13 +43,52 @@ const AppRoutes = () => {
   );
 };
 
+const AppContent = () => {
+  const [showIntro, setShowIntro] = useState(true);
+
+  useEffect(() => {
+    const hasSeenIntro = sessionStorage.getItem("fondling_intro_seen");
+
+    if (hasSeenIntro) {
+      setShowIntro(false);
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      sessionStorage.setItem("fondling_intro_seen", "true");
+      setShowIntro(false);
+    }, 2600);
+
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  return (
+    <>
+      <AnimatePresence mode="wait">
+        {showIntro ? (
+          <LoadingIntro key="loading-intro" />
+        ) : (
+          <motion.div
+            key="app-routes"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.45 }}
+          >
+            <AppRoutes />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AppRoutes />
+        <AppContent />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
