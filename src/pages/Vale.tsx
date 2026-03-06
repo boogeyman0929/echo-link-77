@@ -13,7 +13,7 @@ const socials = [
 ];
 
 const projects = [
-  { title: "pwncheck.wtf", tag: "tool", href: "#" },
+  { title: "pwncheck.wtf", tag: "tool", href: "https://pwncheck.wtf/" },
   { title: "lurki.ng", tag: "site", href: "https://lurki.ng/" },
 ];
 
