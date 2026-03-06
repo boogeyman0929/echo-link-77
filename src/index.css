@@ -27,7 +27,6 @@
     --ring: 0 0% 78%;
     --radius: 0.875rem;
 
-    /* both glows are neutral gray now */
     --vale-glow: 0 0% 78%;
     --sui-glow: 0 0% 78%;
     --glass-bg: 0 0% 4%;
@@ -284,4 +283,40 @@
     background: rgba(255,255,255,0.05);
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
   }
+}
+
+.intro-vignette {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03), transparent 28%),
+    radial-gradient(circle at 50% 50%, transparent 42%, rgba(0,0,0,0.48) 100%);
+}
+
+.intro-grain {
+  opacity: 0.04;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.18) 0px,
+      rgba(255,255,255,0.18) 1px,
+      transparent 1px,
+      transparent 2px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.12) 0px,
+      rgba(255,255,255,0.12) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+  mix-blend-mode: soft-light;
+}
+
+.intro-orb {
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.02) 28%,
+    rgba(255, 255, 255, 0) 68%
+  );
+  filter: blur(24px);
 }
