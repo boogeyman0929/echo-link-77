@@ -56,24 +56,28 @@ const Suicidal = () => {
         </motion.div>
 
         <motion.div
-          className="void-panel sui-panel p-8 mb-8"
+          className="relative overflow-hidden void-panel sui-panel p-8 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1, ease }}
         >
-          <div className="flex items-center gap-5">
+          <div className="glass-reflection" />
+          <div className="flex items-center gap-5 relative z-10">
             <div className="relative">
               <img
                 src="/images/suicidal-pfp.png"
                 alt="suicidal"
-                className="w-20 h-20 rounded-full object-cover border border-[hsl(0,0%,78%,0.22)]"
+                className="w-20 h-20 rounded-full object-cover border border-[hsl(0,0%,78%,0.18)]"
               />
               <div className="absolute bottom-0.5 right-0.5 w-3 h-3 rounded-full bg-emerald-500/80 border-2 border-background" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold soft-display">suicidal</h1>
+              <h1 className="text-2xl font-bold text-zinc-100 soft-display">suicidal</h1>
               <p className="text-sm text-muted-foreground underline-draw inline-block pb-0.5">
                 @imverysuicidal
+              </p>
+              <p className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground/55 mt-1">
+                soft static
               </p>
             </div>
           </div>
