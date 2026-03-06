@@ -77,7 +77,7 @@ const Suicidal = () => {
                 @imverysuicidal
               </p>
               <p className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground/55 mt-1">
-                soft static
+                
               </p>
             </div>
           </div>
