@@ -63,22 +63,20 @@ const AppContent = () => {
   }, []);
 
   return (
-    <>
-      <AnimatePresence mode="wait">
-        {showIntro ? (
-          <LoadingIntro key="loading-intro" />
-        ) : (
-          <motion.div
-            key="app-routes"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.45 }}
-          >
-            <AppRoutes />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+    <AnimatePresence mode="wait">
+      {showIntro ? (
+        <LoadingIntro key="loading-intro" />
+      ) : (
+        <motion.div
+          key="app-routes"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.45 }}
+        >
+          <AppRoutes />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 
