@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,17 +6,17 @@
 
 @layer base {
   :root {
-    --background: 0 0% 3%;
+    --background: 0 0% 1.8%;
     --foreground: 0 0% 88%;
-    --card: 0 0% 6%;
+    --card: 0 0% 4.5%;
     --card-foreground: 0 0% 88%;
-    --popover: 0 0% 6%;
+    --popover: 0 0% 4.5%;
     --popover-foreground: 0 0% 88%;
     --primary: 0 0% 78%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 8%;
+    --secondary: 0 0% 7%;
     --secondary-foreground: 0 0% 70%;
-    --muted: 0 0% 10%;
+    --muted: 0 0% 9%;
     --muted-foreground: 0 0% 45%;
     --accent: 0 0% 74%;
     --accent-foreground: 0 0% 100%;
@@ -29,7 +29,7 @@
 
     --vale-glow: 0 0% 78%;
     --sui-glow: 0 0% 78%;
-    --glass-bg: 0 0% 5%;
+    --glass-bg: 0 0% 4%;
     --glass-border: 0 0% 14%;
   }
 }
@@ -39,9 +39,17 @@
     @apply border-border;
   }
 
+  html {
+    background: hsl(0 0% 1.8%);
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background:
+      radial-gradient(circle at top, rgba(255, 255, 255, 0.018), transparent 34%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.04)),
+      hsl(0 0% 1.8%);
   }
 
   h1,
@@ -69,9 +77,14 @@
 }
 
 @layer utilities {
+  .soft-display {
+    font-family: 'Manrope', 'Space Grotesk', 'Inter', sans-serif;
+    letter-spacing: -0.03em;
+  }
+
   .void-panel {
     @apply rounded-2xl border border-border/40;
-    background: hsl(0 0% 5% / 0.8);
+    background: hsl(0 0% 4.5% / 0.82);
     backdrop-filter: blur(20px);
   }
 
@@ -85,12 +98,12 @@
   }
 
   .vale-panel:hover {
-    box-shadow: 0 0 60px -20px hsl(var(--vale-glow) / 0.12);
+    box-shadow: 0 0 60px -20px hsl(var(--vale-glow) / 0.11);
     border-color: hsl(var(--vale-glow) / 0.18);
   }
 
   .sui-panel:hover {
-    box-shadow: 0 0 60px -20px hsl(var(--sui-glow) / 0.12);
+    box-shadow: 0 0 60px -20px hsl(var(--sui-glow) / 0.11);
     border-color: hsl(var(--sui-glow) / 0.18);
   }
 
@@ -110,16 +123,16 @@
   }
 
   .glow-text-vale {
-    text-shadow: 0 0 30px hsl(var(--vale-glow) / 0.22);
+    text-shadow: 0 0 24px hsl(var(--vale-glow) / 0.18);
   }
 
   .glow-text-sui {
-    text-shadow: 0 0 30px hsl(var(--sui-glow) / 0.22);
+    text-shadow: 0 0 24px hsl(var(--sui-glow) / 0.18);
   }
 
   .gradient-text {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(0 0% 82%), hsl(0 0% 52%));
+    background-image: linear-gradient(135deg, hsl(0 0% 84%), hsl(0 0% 52%));
   }
 
   .gradient-text-vale {
@@ -149,12 +162,12 @@
 
   .link-card {
     @apply flex items-center gap-4 p-4 rounded-xl border border-border/30 transition-all duration-500;
-    background: hsl(0 0% 5% / 0.6);
+    background: hsl(0 0% 4.5% / 0.62);
   }
 
   .link-card:hover {
     border-color: hsl(0 0% 20% / 0.5);
-    background: hsl(0 0% 7% / 0.8);
+    background: hsl(0 0% 6.5% / 0.82);
     transform: translateX(4px);
   }
 }
