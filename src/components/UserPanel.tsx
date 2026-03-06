@@ -54,7 +54,7 @@ const UserPanel = ({ name, username, avatar, socials, delay = 0 }: UserPanelProp
       <div className="flex items-center gap-4 mb-5">
         <div className="relative">
           <img src={avatar} alt={name} className="w-16 h-16 rounded-full object-cover border-2 border-primary/30" />
-          <div className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-card" />
+          <div className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-card" style={{ backgroundColor: "hsl(142, 71%, 45%)" }} />
         </div>
         <div>
           <h2 className="text-lg font-semibold text-foreground">{name}</h2>
