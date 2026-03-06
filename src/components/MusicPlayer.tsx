@@ -12,16 +12,16 @@ const tracks = [
 ];
 
 const PlayIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21" /></svg>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21" /></svg>
 );
 const PauseIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
 );
 const PrevIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4"/><rect x="5" y="4" width="2" height="16"/></svg>
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4"/><rect x="5" y="4" width="2" height="16"/></svg>
 );
 const NextIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20"/><rect x="17" y="4" width="2" height="16"/></svg>
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20"/><rect x="17" y="4" width="2" height="16"/></svg>
 );
 
 const MusicPlayer = () => {
@@ -36,23 +36,14 @@ const MusicPlayer = () => {
   useEffect(() => {
     const a = audioRef.current;
     if (!a) return;
-    const update = () => {
-      if (a.duration) setProgress(a.currentTime / a.duration);
-    };
-    const ended = () => {
-      setCurrent((c) => (c + 1) % tracks.length);
-      setPlaying(true);
-    };
+    const update = () => { if (a.duration) setProgress(a.currentTime / a.duration); };
+    const ended = () => { setCurrent((c) => (c + 1) % tracks.length); setPlaying(true); };
     a.addEventListener("timeupdate", update);
     a.addEventListener("ended", ended);
     return () => { a.removeEventListener("timeupdate", update); a.removeEventListener("ended", ended); };
   }, [current]);
 
-  useEffect(() => {
-    const a = audioRef.current;
-    if (!a) return;
-    a.volume = volume;
-  }, [volume]);
+  useEffect(() => { if (audioRef.current) audioRef.current.volume = volume; }, [volume]);
 
   useEffect(() => {
     const a = audioRef.current;
@@ -75,22 +66,19 @@ const MusicPlayer = () => {
     a.currentTime = ((e.clientX - rect.left) / rect.width) * a.duration;
   };
 
-  const switchTrack = (i: number) => {
-    setCurrent(i);
-    setPlaying(true);
-  };
+  const switchTrack = (i: number) => { setCurrent(i); setPlaying(true); };
 
   return (
     <div className="space-y-3">
       <audio ref={audioRef} src={track.audio} preload="metadata" />
-      
-      <motion.div className="glass-panel p-4 flex items-center gap-4" layout>
+
+      <div className="void-panel p-4 flex items-center gap-4">
         <AnimatePresence mode="wait">
           <motion.img
             key={track.cover}
             src={track.cover}
             alt={track.title}
-            className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
+            className="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-border/30"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
@@ -104,51 +92,41 @@ const MusicPlayer = () => {
 
           <div className="flex items-center gap-2 mt-2">
             <button onClick={() => switchTrack((current - 1 + tracks.length) % tracks.length)} className="text-muted-foreground hover:text-foreground transition-colors duration-300"><PrevIcon /></button>
-            <button onClick={togglePlay} className="w-8 h-8 rounded-full bg-primary/20 hover:bg-primary/30 flex items-center justify-center text-primary transition-all duration-300 hover:shadow-[0_0_15px_hsl(var(--primary)/0.4)]">
+            <button onClick={togglePlay} className="w-7 h-7 rounded-full border border-border/50 flex items-center justify-center text-foreground hover:border-muted-foreground transition-all duration-300">
               {playing ? <PauseIcon /> : <PlayIcon />}
             </button>
             <button onClick={() => switchTrack((current + 1) % tracks.length)} className="text-muted-foreground hover:text-foreground transition-colors duration-300"><NextIcon /></button>
           </div>
 
-          <div className="mt-2 h-1 rounded-full bg-muted cursor-pointer group" onClick={seek}>
-            <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-primary to-accent"
-              style={{ width: `${progress * 100}%` }}
-              transition={{ duration: 0.1 }}
-            />
+          <div className="mt-2 h-0.5 rounded-full bg-muted cursor-pointer" onClick={seek}>
+            <motion.div className="h-full rounded-full bg-muted-foreground/50" style={{ width: `${progress * 100}%` }} transition={{ duration: 0.1 }} />
           </div>
         </div>
 
         <div className="flex items-center gap-1.5 flex-shrink-0">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-muted-foreground">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-muted-foreground">
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19" />
             <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
           </svg>
-          <input
-            type="range" min="0" max="1" step="0.01" value={volume}
-            onChange={(e) => setVolume(parseFloat(e.target.value))}
-            className="w-14 h-1 accent-primary cursor-pointer"
-          />
+          <input type="range" min="0" max="1" step="0.01" value={volume} onChange={(e) => setVolume(parseFloat(e.target.value))} className="w-12 h-0.5 accent-muted-foreground cursor-pointer" />
         </div>
-      </motion.div>
+      </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+      <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
         {tracks.map((t, i) => (
-          <motion.button
+          <button
             key={i}
             onClick={() => switchTrack(i)}
             className={`flex-shrink-0 flex items-center gap-2 p-2 rounded-xl border transition-all duration-300 ${
-              i === current ? "border-primary/40 bg-primary/10" : "border-border/30 bg-card/40 hover:border-primary/20"
+              i === current ? "border-muted-foreground/30 bg-muted/30" : "border-border/20 bg-transparent hover:border-border/40"
             }`}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
           >
-            <img src={t.cover} alt={t.title} className="w-8 h-8 rounded-md object-cover" />
+            <img src={t.cover} alt={t.title} className="w-7 h-7 rounded-md object-cover" />
             <div className="text-left">
-              <p className="text-[11px] font-medium text-foreground truncate max-w-[80px]">{t.title}</p>
-              <p className="text-[10px] text-muted-foreground truncate max-w-[80px]">{t.artist}</p>
+              <p className="text-[10px] font-medium text-foreground truncate max-w-[70px]">{t.title}</p>
+              <p className="text-[9px] text-muted-foreground truncate max-w-[70px]">{t.artist}</p>
             </div>
-          </motion.button>
+          </button>
         ))}
       </div>
     </div>
