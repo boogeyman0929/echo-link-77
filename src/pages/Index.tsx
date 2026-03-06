@@ -9,6 +9,8 @@ import {
 } from "@/components/icons/SocialIcons";
 
 const ease = [0.22, 1, 0.36, 1] as const;
+const NAMEPLATE_VIDEO =
+  "https://cdn.discordapp.com/assets/collectibles/nameplates/gothica/nevermore/asset.webm";
 
 type TiltCardProps = {
   to: string;
@@ -23,6 +25,7 @@ type TiltCardProps = {
   socialBIcon: ReactNode;
   socialBText: string;
   delay: number;
+  showOverlay?: boolean;
 };
 
 const TiltCard = ({
@@ -38,6 +41,7 @@ const TiltCard = ({
   socialBIcon,
   socialBText,
   delay,
+  showOverlay = false,
 }: TiltCardProps) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -77,6 +81,18 @@ const TiltCard = ({
         onMouseLeave={handleLeave}
       >
         <div className="glass-reflection" />
+
+        {showOverlay && (
+          <video
+            className="nameplate-overlay"
+            src={NAMEPLATE_VIDEO}
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
+        )}
+
         <div className="absolute inset-x-0 top-0 h-px bg-white/10" />
 
         <div className="relative z-10 flex items-center gap-5 mb-6">
@@ -157,12 +173,13 @@ const Index = () => {
             alt="vale"
             name="vale"
             handle="@affording"
-            quote=""
+            quote="cold light"
             socialAIcon={<DiscordIcon />}
             socialAText="@affording"
             socialBIcon={<TelegramIcon />}
             socialBText="t.me/junctural"
             delay={0.2}
+            showOverlay
           />
 
           <TiltCard
@@ -172,7 +189,7 @@ const Index = () => {
             alt="suicidal"
             name="suicidal"
             handle="@imverysuicidal"
-            quote=""
+            quote="soft static"
             socialAIcon={<DiscordIcon />}
             socialAText="@imverysuicidal"
             socialBIcon={<InstagramIcon />}
