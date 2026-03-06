@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import StarBackground from "@/components/StarBackground";
 import { DiscordIcon, TelegramIcon, InstagramIcon } from "@/components/icons/SocialIcons";
 
-const ease = [0.22, 1, 0.36, 1];
+const ease = [0.22, 1, 0.36, 1] as const;
 
 const Index = () => {
   return (

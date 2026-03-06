@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import StarBackground from "@/components/StarBackground";
 import { DiscordIcon, InstagramIcon, ArrowUpRight, BackArrow } from "@/components/icons/SocialIcons";
 
-const ease = [0.22, 1, 0.36, 1];
+const ease = [0.22, 1, 0.36, 1] as const;
 
 const socials = [
   { icon: <DiscordIcon />, label: "Discord", value: "@imverysuicidal", href: "https://discord.com/users/1411861426796232746" },
