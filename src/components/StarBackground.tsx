@@ -1,5 +1,24 @@
 import { useEffect, useRef } from "react";
 
+type Star = {
+  x: number;
+  y: number;
+  r: number;
+  speed: number;
+  opacity: number;
+  pulse: number;
+  pulseSpeed: number;
+};
+
+type ShootingStar = {
+  x: number;
+  y: number;
+  len: number;
+  speed: number;
+  life: number;
+  maxLife: number;
+};
+
 const StarBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -9,20 +28,16 @@ const StarBackground = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let animationId: number;
-    const stars: {
-      x: number;
-      y: number;
-      r: number;
-      speed: number;
-      opacity: number;
-      pulse: number;
-      pulseSpeed: number;
-    }[] = [];
+    let animationId = 0;
+    const stars: Star[] = [];
+    const shootingStars: ShootingStar[] = [];
 
     const createStars = () => {
       stars.length = 0;
-      const count = Math.max(70, Math.floor((window.innerWidth * window.innerHeight) / 22000));
+      const count = Math.max(
+        80,
+        Math.floor((window.innerWidth * window.innerHeight) / 21000)
+      );
 
       for (let i = 0; i < count; i++) {
         stars.push({
@@ -43,6 +58,17 @@ const StarBackground = () => {
       createStars();
     };
 
+    const spawnShootingStar = () => {
+      shootingStars.push({
+        x: Math.random() * canvas.width * 0.7 + canvas.width * 0.15,
+        y: Math.random() * canvas.height * 0.35,
+        len: Math.random() * 90 + 70,
+        speed: Math.random() * 12 + 8,
+        life: 0,
+        maxLife: Math.random() * 22 + 18,
+      });
+    };
+
     resize();
     window.addEventListener("resize", resize);
 
@@ -58,18 +84,50 @@ const StarBackground = () => {
         ctx.fillStyle = `rgba(226, 228, 232, ${currentOpacity})`;
         ctx.fill();
 
-        if (s.r > 0.8) {
+        if (s.r > 0.82) {
           ctx.beginPath();
           ctx.arc(s.x, s.y, s.r * 2.1, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(226, 228, 232, ${currentOpacity * 0.07})`;
+          ctx.fillStyle = `rgba(226, 228, 232, ${currentOpacity * 0.06})`;
           ctx.fill();
         }
 
         s.y -= s.speed;
-
         if (s.y < -3) {
           s.y = canvas.height + 3;
           s.x = Math.random() * canvas.width;
+        }
+      }
+
+      if (Math.random() < 0.0024 && shootingStars.length < 2) {
+        spawnShootingStar();
+      }
+
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const star = shootingStars[i];
+        star.life += 1;
+        star.x += star.speed;
+        star.y += star.speed * 0.45;
+
+        const alpha = 1 - star.life / star.maxLife;
+        const gradient = ctx.createLinearGradient(
+          star.x,
+          star.y,
+          star.x - star.len,
+          star.y - star.len * 0.45
+        );
+
+        gradient.addColorStop(0, `rgba(255,255,255,${alpha * 0.7})`);
+        gradient.addColorStop(1, "rgba(255,255,255,0)");
+
+        ctx.beginPath();
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 1.2;
+        ctx.moveTo(star.x, star.y);
+        ctx.lineTo(star.x - star.len, star.y - star.len * 0.45);
+        ctx.stroke();
+
+        if (star.life >= star.maxLife) {
+          shootingStars.splice(i, 1);
         }
       }
 
@@ -84,7 +142,12 @@ const StarBackground = () => {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0 opacity-90" />;
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none z-0 opacity-90"
+    />
+  );
 };
 
 export default StarBackground;
