@@ -208,7 +208,7 @@ const MusicPlayer = ({
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <span className="music-badge">{playing ? "now playing" : "loaded"}</span>
+              <span className="music-badge">{playing ? "now playing" : "paused"}</span>
             </div>
 
             <p className="text-lg font-semibold truncate text-foreground soft-display">
