@@ -48,7 +48,7 @@ const Suicidal = () => {
             <div>
               <h1 className="text-2xl font-bold gradient-text-sui">suicidal</h1>
               <p className="text-sm text-muted-foreground underline-draw inline-block pb-0.5">@imverysuicidal</p>
-              <p className="text-xs text-muted-foreground/60 mt-1">drifting through the void</p>
+              <p className="text-xs text-muted-foreground/60 mt-1"></p>
             </div>
           </div>
         </motion.div>
