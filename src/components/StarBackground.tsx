@@ -10,13 +10,15 @@ type Star = {
   pulseSpeed: number;
 };
 
-type ShootingStar = {
+type Comet = {
   x: number;
   y: number;
   len: number;
-  speed: number;
+  speedX: number;
+  speedY: number;
   life: number;
   maxLife: number;
+  opacity: number;
 };
 
 const StarBackground = () => {
@@ -30,24 +32,25 @@ const StarBackground = () => {
 
     let animationId = 0;
     const stars: Star[] = [];
-    const shootingStars: ShootingStar[] = [];
+    const comets: Comet[] = [];
 
     const createStars = () => {
       stars.length = 0;
+
       const count = Math.max(
-        80,
-        Math.floor((window.innerWidth * window.innerHeight) / 21000)
+        95,
+        Math.floor((window.innerWidth * window.innerHeight) / 18000)
       );
 
       for (let i = 0; i < count; i++) {
         stars.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          r: Math.random() * 1 + 0.25,
-          speed: Math.random() * 0.06 + 0.008,
-          opacity: Math.random() * 0.2 + 0.06,
+          r: Math.random() * 1.15 + 0.28,
+          speed: Math.random() * 0.07 + 0.01,
+          opacity: Math.random() * 0.28 + 0.08,
           pulse: Math.random() * Math.PI * 2,
-          pulseSpeed: Math.random() * 0.004 + 0.0015,
+          pulseSpeed: Math.random() * 0.005 + 0.0015,
         });
       }
     };
@@ -58,78 +61,109 @@ const StarBackground = () => {
       createStars();
     };
 
-    const spawnShootingStar = () => {
-      shootingStars.push({
-        x: Math.random() * canvas.width * 0.7 + canvas.width * 0.15,
-        y: Math.random() * canvas.height * 0.35,
-        len: Math.random() * 90 + 70,
-        speed: Math.random() * 12 + 8,
+    const spawnComet = () => {
+      const fromTop = Math.random() < 0.7;
+
+      comets.push({
+        x: fromTop
+          ? Math.random() * canvas.width * 0.75
+          : -120,
+        y: fromTop
+          ? Math.random() * canvas.height * 0.28
+          : Math.random() * canvas.height * 0.35,
+        len: Math.random() * 120 + 90,
+        speedX: Math.random() * 7 + 8,
+        speedY: Math.random() * 2.2 + 2.6,
         life: 0,
-        maxLife: Math.random() * 22 + 18,
+        maxLife: Math.random() * 30 + 24,
+        opacity: Math.random() * 0.22 + 0.28,
       });
     };
 
     resize();
     window.addEventListener("resize", resize);
 
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+    const drawStars = () => {
       for (const s of stars) {
         s.pulse += s.pulseSpeed;
-        const currentOpacity = s.opacity * (0.58 + 0.42 * Math.sin(s.pulse));
+        const currentOpacity = s.opacity * (0.62 + 0.38 * Math.sin(s.pulse));
 
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(226, 228, 232, ${currentOpacity})`;
+        ctx.fillStyle = `rgba(232, 235, 240, ${currentOpacity})`;
         ctx.fill();
 
-        if (s.r > 0.82) {
+        if (s.r > 0.85) {
           ctx.beginPath();
-          ctx.arc(s.x, s.y, s.r * 2.1, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(226, 228, 232, ${currentOpacity * 0.05})`;
+          ctx.arc(s.x, s.y, s.r * 2.3, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(232, 235, 240, ${currentOpacity * 0.07})`;
           ctx.fill();
         }
 
         s.y -= s.speed;
-        if (s.y < -3) {
-          s.y = canvas.height + 3;
+
+        if (s.y < -4) {
+          s.y = canvas.height + 4;
           s.x = Math.random() * canvas.width;
         }
       }
+    };
 
-      if (Math.random() < 0.0018 && shootingStars.length < 2) {
-        spawnShootingStar();
+    const drawComets = () => {
+      if (Math.random() < 0.0035 && comets.length < 3) {
+        spawnComet();
       }
 
-      for (let i = shootingStars.length - 1; i >= 0; i--) {
-        const star = shootingStars[i];
-        star.life += 1;
-        star.x += star.speed;
-        star.y += star.speed * 0.45;
+      for (let i = comets.length - 1; i >= 0; i--) {
+        const comet = comets[i];
+        comet.life += 1;
+        comet.x += comet.speedX;
+        comet.y += comet.speedY;
 
-        const alpha = 1 - star.life / star.maxLife;
+        const fade = 1 - comet.life / comet.maxLife;
+        const alpha = comet.opacity * fade;
+
+        const tailX = comet.x - comet.len;
+        const tailY = comet.y - comet.len * 0.28;
+
         const gradient = ctx.createLinearGradient(
-          star.x,
-          star.y,
-          star.x - star.len,
-          star.y - star.len * 0.45
+          comet.x,
+          comet.y,
+          tailX,
+          tailY
         );
 
-        gradient.addColorStop(0, `rgba(255,255,255,${alpha * 0.55})`);
+        gradient.addColorStop(0, `rgba(255,255,255,${alpha})`);
+        gradient.addColorStop(0.2, `rgba(255,255,255,${alpha * 0.75})`);
         gradient.addColorStop(1, "rgba(255,255,255,0)");
 
         ctx.beginPath();
         ctx.strokeStyle = gradient;
-        ctx.lineWidth = 1.1;
-        ctx.moveTo(star.x, star.y);
-        ctx.lineTo(star.x - star.len, star.y - star.len * 0.45);
+        ctx.lineWidth = 1.4;
+        ctx.moveTo(comet.x, comet.y);
+        ctx.lineTo(tailX, tailY);
         ctx.stroke();
 
-        if (star.life >= star.maxLife) {
-          shootingStars.splice(i, 1);
+        ctx.beginPath();
+        ctx.arc(comet.x, comet.y, 1.3, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${alpha * 0.9})`;
+        ctx.fill();
+
+        if (
+          comet.life >= comet.maxLife ||
+          comet.x - comet.len > canvas.width + 40 ||
+          comet.y - comet.len > canvas.height + 40
+        ) {
+          comets.splice(i, 1);
         }
       }
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      drawStars();
+      drawComets();
 
       animationId = requestAnimationFrame(draw);
     };
@@ -145,7 +179,7 @@ const StarBackground = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-0 opacity-90"
+      className="fixed inset-0 pointer-events-none z-0 opacity-95"
     />
   );
 };
