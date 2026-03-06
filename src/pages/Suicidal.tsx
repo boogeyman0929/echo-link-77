@@ -26,13 +26,21 @@ const socials = [
   },
 ];
 
+const suicidalTrack = [
+  {
+    title: "Up Up",
+    artist: "Elusin",
+    cover: "https://files.catbox.moe/6xuixo.png",
+    audio: "https://files.catbox.moe/24uy8x.mp3",
+  },
+];
+
 const Suicidal = () => {
   return (
     <div className="relative min-h-screen overflow-hidden">
       <StarBackground />
 
       <div className="relative z-10 max-w-[640px] mx-auto px-5 py-12 md:py-20">
-        {/* Back */}
         <motion.div
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
@@ -47,7 +55,6 @@ const Suicidal = () => {
           </Link>
         </motion.div>
 
-        {/* Hero */}
         <motion.div
           className="void-panel sui-panel p-8 mb-8"
           initial={{ opacity: 0, y: 20 }}
@@ -64,7 +71,7 @@ const Suicidal = () => {
               <div className="absolute bottom-0.5 right-0.5 w-3 h-3 rounded-full bg-emerald-500/80 border-2 border-background" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-zinc-100">suicidal</h1>
+              <h1 className="text-2xl font-bold soft-display">suicidal</h1>
               <p className="text-sm text-muted-foreground underline-draw inline-block pb-0.5">
                 @imverysuicidal
               </p>
@@ -72,7 +79,6 @@ const Suicidal = () => {
           </div>
         </motion.div>
 
-        {/* Music */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -82,10 +88,9 @@ const Suicidal = () => {
           <h3 className="text-xs uppercase tracking-widest text-muted-foreground mb-4 px-1">
             Listening
           </h3>
-          <MusicPlayer initialTrack={7} />
+          <MusicPlayer tracksOverride={suicidalTrack} hideTrackList />
         </motion.div>
 
-        {/* Socials */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
