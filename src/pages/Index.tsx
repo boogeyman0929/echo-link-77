@@ -21,7 +21,7 @@ const Index = () => {
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             <span className="gradient-text">fondl.ing</span>
           </h1>
-          <p className="text-sm text-muted-foreground tracking-widest uppercase">two identities · one void</p>
+          <p className="text-sm text-muted-foreground tracking-widest uppercase"></p>
         </motion.div>
 
         {/* Duo Panels */}
