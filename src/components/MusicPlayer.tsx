@@ -1,7 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const tracks = [
+type Track = {
+  title: string;
+  artist: string;
+  cover: string;
+  audio: string;
+};
+
+const defaultTracks: Track[] = [
   {
     title: "candyboii",
     artist: "dcdcdc",
@@ -54,6 +61,8 @@ const tracks = [
 
 type MusicPlayerProps = {
   initialTrack?: number;
+  tracksOverride?: Track[];
+  hideTrackList?: boolean;
 };
 
 const PlayIcon = () => (
@@ -83,7 +92,12 @@ const NextIcon = () => (
   </svg>
 );
 
-const MusicPlayer = ({ initialTrack = 0 }: MusicPlayerProps) => {
+const MusicPlayer = ({
+  initialTrack = 0,
+  tracksOverride,
+  hideTrackList = false,
+}: MusicPlayerProps) => {
+  const tracks = tracksOverride && tracksOverride.length > 0 ? tracksOverride : defaultTracks;
   const safeInitialTrack =
     initialTrack >= 0 && initialTrack < tracks.length ? initialTrack : 0;
 
@@ -96,6 +110,10 @@ const MusicPlayer = ({ initialTrack = 0 }: MusicPlayerProps) => {
   const track = tracks[current];
 
   useEffect(() => {
+    setCurrent(safeInitialTrack);
+  }, [safeInitialTrack]);
+
+  useEffect(() => {
     const a = audioRef.current;
     if (!a) return;
 
@@ -104,6 +122,13 @@ const MusicPlayer = ({ initialTrack = 0 }: MusicPlayerProps) => {
     };
 
     const ended = () => {
+      if (tracks.length <= 1) {
+        a.currentTime = 0;
+        setPlaying(false);
+        setProgress(0);
+        return;
+      }
+
       setCurrent((c) => (c + 1) % tracks.length);
       setPlaying(true);
     };
@@ -115,7 +140,7 @@ const MusicPlayer = ({ initialTrack = 0 }: MusicPlayerProps) => {
       a.removeEventListener("timeupdate", update);
       a.removeEventListener("ended", ended);
     };
-  }, []);
+  }, [tracks.length]);
 
   useEffect(() => {
     if (audioRef.current) audioRef.current.volume = volume;
@@ -125,6 +150,7 @@ const MusicPlayer = ({ initialTrack = 0 }: MusicPlayerProps) => {
     const a = audioRef.current;
     if (!a) return;
     a.load();
+    setProgress(0);
     if (playing) a.play().catch(() => {});
   }, [current, playing]);
 
@@ -154,6 +180,8 @@ const MusicPlayer = ({ initialTrack = 0 }: MusicPlayerProps) => {
     setPlaying(true);
   };
 
+  const canSwitchTracks = tracks.length > 1;
+
   return (
     <div className="space-y-3">
       <audio ref={audioRef} src={track.audio} preload="metadata" />
@@ -165,27 +193,29 @@ const MusicPlayer = ({ initialTrack = 0 }: MusicPlayerProps) => {
             src={track.cover}
             alt={track.title}
             className="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-border/30"
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.3 }}
+            exit={{ opacity: 0, scale: 0.92 }}
+            transition={{ duration: 0.25 }}
           />
         </AnimatePresence>
 
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium truncate text-foreground">
-            {track.title}
-          </p>
-          <p className="text-xs text-muted-foreground truncate">
-            {track.artist}
-          </p>
+          <p className="text-sm font-medium truncate text-foreground">{track.title}</p>
+          <p className="text-xs text-muted-foreground truncate">{track.artist}</p>
 
           <div className="flex items-center gap-2 mt-2">
             <button
               onClick={() =>
+                canSwitchTracks &&
                 switchTrack((current - 1 + tracks.length) % tracks.length)
               }
-              className="text-muted-foreground hover:text-foreground transition-colors duration-300"
+              disabled={!canSwitchTracks}
+              className={`transition-colors duration-300 ${
+                canSwitchTracks
+                  ? "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground/30 cursor-not-allowed"
+              }`}
             >
               <PrevIcon />
             </button>
@@ -198,8 +228,13 @@ const MusicPlayer = ({ initialTrack = 0 }: MusicPlayerProps) => {
             </button>
 
             <button
-              onClick={() => switchTrack((current + 1) % tracks.length)}
-              className="text-muted-foreground hover:text-foreground transition-colors duration-300"
+              onClick={() => canSwitchTracks && switchTrack((current + 1) % tracks.length)}
+              disabled={!canSwitchTracks}
+              className={`transition-colors duration-300 ${
+                canSwitchTracks
+                  ? "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground/30 cursor-not-allowed"
+              }`}
             >
               <NextIcon />
             </button>
@@ -242,33 +277,35 @@ const MusicPlayer = ({ initialTrack = 0 }: MusicPlayerProps) => {
         </div>
       </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
-        {tracks.map((t, i) => (
-          <button
-            key={i}
-            onClick={() => switchTrack(i)}
-            className={`flex-shrink-0 flex items-center gap-2 p-2 rounded-xl border transition-all duration-300 ${
-              i === current
-                ? "border-muted-foreground/30 bg-muted/30"
-                : "border-border/20 bg-transparent hover:border-border/40"
-            }`}
-          >
-            <img
-              src={t.cover}
-              alt={t.title}
-              className="w-7 h-7 rounded-md object-cover"
-            />
-            <div className="text-left">
-              <p className="text-[10px] font-medium text-foreground truncate max-w-[70px]">
-                {t.title}
-              </p>
-              <p className="text-[9px] text-muted-foreground truncate max-w-[70px]">
-                {t.artist}
-              </p>
-            </div>
-          </button>
-        ))}
-      </div>
+      {!hideTrackList && (
+        <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
+          {tracks.map((t, i) => (
+            <button
+              key={i}
+              onClick={() => switchTrack(i)}
+              className={`flex-shrink-0 flex items-center gap-2 p-2 rounded-xl border transition-all duration-300 ${
+                i === current
+                  ? "border-muted-foreground/30 bg-muted/30"
+                  : "border-border/20 bg-transparent hover:border-border/40"
+              }`}
+            >
+              <img
+                src={t.cover}
+                alt={t.title}
+                className="w-7 h-7 rounded-md object-cover"
+              />
+              <div className="text-left">
+                <p className="text-[10px] font-medium text-foreground truncate max-w-[70px]">
+                  {t.title}
+                </p>
+                <p className="text-[9px] text-muted-foreground truncate max-w-[70px]">
+                  {t.artist}
+                </p>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
