@@ -35,7 +35,7 @@ const socials = [
 ];
 
 const projects = [
-  { title: "pwncheck.wtf", tag: "tool", href: "https://pwncheck.wtf/" },
+  { title: "pwncheck.wtf", tag: "tool", href: "#" },
   { title: "lurki.ng", tag: "site", href: "https://lurki.ng/" },
 ];
 
@@ -45,7 +45,6 @@ const Vale = () => {
       <StarBackground />
 
       <div className="relative z-10 max-w-[640px] mx-auto px-5 py-12 md:py-20">
-        {/* Back */}
         <motion.div
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
@@ -60,32 +59,34 @@ const Vale = () => {
           </Link>
         </motion.div>
 
-        {/* Hero */}
         <motion.div
-          className="void-panel vale-panel p-8 mb-8"
+          className="relative overflow-hidden void-panel vale-panel p-8 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1, ease }}
         >
-          <div className="flex items-center gap-5">
+          <div className="glass-reflection" />
+          <div className="flex items-center gap-5 relative z-10">
             <div className="relative">
               <img
                 src="/images/vale-pfp.jpg"
                 alt="vale"
-                className="w-20 h-20 rounded-full object-cover border border-[hsl(0,0%,78%,0.22)]"
+                className="w-20 h-20 rounded-full object-cover border border-[hsl(0,0%,78%,0.18)]"
               />
               <div className="absolute bottom-0.5 right-0.5 w-3 h-3 rounded-full bg-emerald-500/80 border-2 border-background" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-zinc-100">vale</h1>
+              <h1 className="text-2xl font-bold text-zinc-100 soft-display">vale</h1>
               <p className="text-sm text-muted-foreground underline-draw inline-block pb-0.5">
                 @affording
+              </p>
+              <p className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground/55 mt-1">
+                cold light
               </p>
             </div>
           </div>
         </motion.div>
 
-        {/* Projects */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -102,24 +103,25 @@ const Vale = () => {
                 href={p.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="void-panel-hover vale-panel p-5 flex items-center gap-4 group"
+                className="relative overflow-hidden void-panel-hover vale-panel p-5 flex items-center gap-4 group"
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 + i * 0.08, duration: 0.5, ease }}
               >
+                <div className="glass-reflection" />
                 <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center border border-border/40 text-muted-foreground group-hover:text-foreground transition-colors duration-500"
+                  className="relative z-10 w-10 h-10 rounded-xl flex items-center justify-center border border-border/40 text-muted-foreground group-hover:text-foreground transition-colors duration-500"
                   style={{ background: "hsl(0 0% 6%)" }}
                 >
                   <LinkIcon />
                 </div>
-                <div className="flex-1 min-w-0">
+                <div className="relative z-10 flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground">{p.title}</p>
                   <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
                     {p.tag}
                   </span>
                 </div>
-                <span className="text-muted-foreground group-hover:text-foreground transition-all duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                <span className="relative z-10 text-muted-foreground group-hover:text-foreground transition-all duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
                   <ArrowUpRight />
                 </span>
               </motion.a>
@@ -127,7 +129,6 @@ const Vale = () => {
           </div>
         </motion.div>
 
-        {/* Links */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -168,7 +169,6 @@ const Vale = () => {
           </div>
         </motion.div>
 
-        {/* Music */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
