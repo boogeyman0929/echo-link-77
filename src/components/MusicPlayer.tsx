@@ -62,7 +62,6 @@ const defaultTracks: Track[] = [
 type MusicPlayerProps = {
   initialTrack?: number;
   tracksOverride?: Track[];
-  hideTrackList?: boolean;
 };
 
 const PlayIcon = () => (
@@ -143,16 +142,22 @@ const MusicPlayer = ({
   }, [tracks.length]);
 
   useEffect(() => {
-    if (audioRef.current) audioRef.current.volume = volume;
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
   }, [volume]);
 
   useEffect(() => {
     const a = audioRef.current;
     if (!a) return;
+
     a.load();
     setProgress(0);
-    if (playing) a.play().catch(() => {});
-  }, [current, playing]);
+
+    if (playing) {
+      a.play().catch(() => {});
+    }
+  }, [current]);
 
   const togglePlay = () => {
     const a = audioRef.current;
