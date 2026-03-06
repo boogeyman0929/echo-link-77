@@ -54,7 +54,7 @@ const Vale = () => {
             <div>
               <h1 className="text-2xl font-bold gradient-text-vale">vale</h1>
               <p className="text-sm text-muted-foreground underline-draw inline-block pb-0.5">@affording</p>
-              <p className="text-xs text-muted-foreground/60 mt-1">building in the void</p>
+              <p className="text-xs text-muted-foreground/60 mt-1"></p>
             </div>
           </div>
         </motion.div>
