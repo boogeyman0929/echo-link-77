@@ -157,7 +157,7 @@ const Index = () => {
             alt="vale"
             name="vale"
             handle="@affording"
-            quote="cold light"
+            quote=""
             socialAIcon={<DiscordIcon />}
             socialAText="@affording"
             socialBIcon={<TelegramIcon />}
