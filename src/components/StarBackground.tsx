@@ -45,7 +45,7 @@ const StarBackground = () => {
           y: Math.random() * canvas.height,
           r: Math.random() * 1 + 0.25,
           speed: Math.random() * 0.06 + 0.008,
-          opacity: Math.random() * 0.22 + 0.08,
+          opacity: Math.random() * 0.2 + 0.06,
           pulse: Math.random() * Math.PI * 2,
           pulseSpeed: Math.random() * 0.004 + 0.0015,
         });
@@ -87,7 +87,7 @@ const StarBackground = () => {
         if (s.r > 0.82) {
           ctx.beginPath();
           ctx.arc(s.x, s.y, s.r * 2.1, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(226, 228, 232, ${currentOpacity * 0.06})`;
+          ctx.fillStyle = `rgba(226, 228, 232, ${currentOpacity * 0.05})`;
           ctx.fill();
         }
 
@@ -98,7 +98,7 @@ const StarBackground = () => {
         }
       }
 
-      if (Math.random() < 0.0024 && shootingStars.length < 2) {
+      if (Math.random() < 0.0018 && shootingStars.length < 2) {
         spawnShootingStar();
       }
 
@@ -116,12 +116,12 @@ const StarBackground = () => {
           star.y - star.len * 0.45
         );
 
-        gradient.addColorStop(0, `rgba(255,255,255,${alpha * 0.7})`);
+        gradient.addColorStop(0, `rgba(255,255,255,${alpha * 0.55})`);
         gradient.addColorStop(1, "rgba(255,255,255,0)");
 
         ctx.beginPath();
         ctx.strokeStyle = gradient;
-        ctx.lineWidth = 1.2;
+        ctx.lineWidth = 1.1;
         ctx.moveTo(star.x, star.y);
         ctx.lineTo(star.x - star.len, star.y - star.len * 0.45);
         ctx.stroke();
