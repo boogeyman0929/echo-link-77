@@ -104,10 +104,11 @@ const MusicPlayer = ({
   const [current, setCurrent] = useState(safeInitialTrack);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [volume, setVolume] = useState(0.5);
+  const [volume, setVolume] = useState(0.55);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const track = tracks[current];
+  const canSwitchTracks = tracks.length > 1;
 
   useEffect(() => {
     setCurrent(safeInitialTrack);
@@ -180,100 +181,108 @@ const MusicPlayer = ({
     setPlaying(true);
   };
 
-  const canSwitchTracks = tracks.length > 1;
-
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <audio ref={audioRef} src={track.audio} preload="metadata" />
 
-      <div className="void-panel p-4 flex items-center gap-4">
-        <AnimatePresence mode="wait">
-          <motion.img
-            key={track.cover}
-            src={track.cover}
-            alt={track.title}
-            className="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-border/30"
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.92 }}
-            transition={{ duration: 0.25 }}
-          />
-        </AnimatePresence>
+      <div className="music-shell relative overflow-hidden">
+        <div className="glass-reflection" />
 
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium truncate text-foreground">{track.title}</p>
-          <p className="text-xs text-muted-foreground truncate">{track.artist}</p>
-
-          <div className="flex items-center gap-2 mt-2">
-            <button
-              onClick={() =>
-                canSwitchTracks &&
-                switchTrack((current - 1 + tracks.length) % tracks.length)
-              }
-              disabled={!canSwitchTracks}
-              className={`transition-colors duration-300 ${
-                canSwitchTracks
-                  ? "text-muted-foreground hover:text-foreground"
-                  : "text-muted-foreground/30 cursor-not-allowed"
-              }`}
+        <div className="relative z-10 flex items-center gap-4">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={track.cover}
+              className="music-cover-wrap"
+              initial={{ opacity: 0, scale: 0.92 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.92 }}
+              transition={{ duration: 0.25 }}
             >
-              <PrevIcon />
-            </button>
+              <img
+                src={track.cover}
+                alt={track.title}
+                className="music-cover"
+              />
+            </motion.div>
+          </AnimatePresence>
 
-            <button
-              onClick={togglePlay}
-              className="w-7 h-7 rounded-full border border-border/50 flex items-center justify-center text-foreground hover:border-muted-foreground transition-all duration-300"
-            >
-              {playing ? <PauseIcon /> : <PlayIcon />}
-            </button>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="music-badge">{playing ? "now playing" : "loaded"}</span>
+            </div>
 
-            <button
-              onClick={() => canSwitchTracks && switchTrack((current + 1) % tracks.length)}
-              disabled={!canSwitchTracks}
-              className={`transition-colors duration-300 ${
-                canSwitchTracks
-                  ? "text-muted-foreground hover:text-foreground"
-                  : "text-muted-foreground/30 cursor-not-allowed"
-              }`}
-            >
-              <NextIcon />
-            </button>
+            <p className="text-lg font-semibold truncate text-foreground soft-display">
+              {track.title}
+            </p>
+            <p className="text-sm text-muted-foreground truncate">{track.artist}</p>
+
+            <div className="flex items-center gap-3 mt-4">
+              <button
+                onClick={() =>
+                  canSwitchTracks &&
+                  switchTrack((current - 1 + tracks.length) % tracks.length)
+                }
+                disabled={!canSwitchTracks}
+                className={`transition-colors duration-300 ${
+                  canSwitchTracks
+                    ? "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground/30 cursor-not-allowed"
+                }`}
+              >
+                <PrevIcon />
+              </button>
+
+              <button onClick={togglePlay} className="music-play-btn">
+                {playing ? <PauseIcon /> : <PlayIcon />}
+              </button>
+
+              <button
+                onClick={() =>
+                  canSwitchTracks && switchTrack((current + 1) % tracks.length)
+                }
+                disabled={!canSwitchTracks}
+                className={`transition-colors duration-300 ${
+                  canSwitchTracks
+                    ? "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground/30 cursor-not-allowed"
+                }`}
+              >
+                <NextIcon />
+              </button>
+            </div>
+
+            <div className="mt-4 music-progress" onClick={seek}>
+              <motion.div
+                className="music-progress-bar"
+                style={{ width: `${progress * 100}%` }}
+                transition={{ duration: 0.1 }}
+              />
+            </div>
           </div>
 
-          <div
-            className="mt-2 h-0.5 rounded-full bg-muted cursor-pointer"
-            onClick={seek}
-          >
-            <motion.div
-              className="h-full rounded-full bg-muted-foreground/50"
-              style={{ width: `${progress * 100}%` }}
-              transition={{ duration: 0.1 }}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <svg
+              width="10"
+              height="10"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className="text-muted-foreground"
+            >
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19" />
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+            </svg>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={volume}
+              onChange={(e) => setVolume(parseFloat(e.target.value))}
+              className="w-14 h-0.5 accent-muted-foreground cursor-pointer"
             />
           </div>
-        </div>
-
-        <div className="flex items-center gap-1.5 flex-shrink-0">
-          <svg
-            width="10"
-            height="10"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            className="text-muted-foreground"
-          >
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19" />
-            <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-          </svg>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={volume}
-            onChange={(e) => setVolume(parseFloat(e.target.value))}
-            className="w-12 h-0.5 accent-muted-foreground cursor-pointer"
-          />
         </div>
       </div>
 
@@ -283,22 +292,16 @@ const MusicPlayer = ({
             <button
               key={i}
               onClick={() => switchTrack(i)}
-              className={`flex-shrink-0 flex items-center gap-2 p-2 rounded-xl border transition-all duration-300 ${
-                i === current
-                  ? "border-muted-foreground/30 bg-muted/30"
-                  : "border-border/20 bg-transparent hover:border-border/40"
+              className={`music-pill ${
+                i === current ? "music-pill-active" : ""
               }`}
             >
-              <img
-                src={t.cover}
-                alt={t.title}
-                className="w-7 h-7 rounded-md object-cover"
-              />
-              <div className="text-left">
-                <p className="text-[10px] font-medium text-foreground truncate max-w-[70px]">
+              <img src={t.cover} alt={t.title} className="w-8 h-8 rounded-lg object-cover" />
+              <div className="text-left min-w-0">
+                <p className="text-[11px] font-medium text-foreground truncate max-w-[96px]">
                   {t.title}
                 </p>
-                <p className="text-[9px] text-muted-foreground truncate max-w-[70px]">
+                <p className="text-[10px] text-muted-foreground truncate max-w-[96px]">
                   {t.artist}
                 </p>
               </div>
