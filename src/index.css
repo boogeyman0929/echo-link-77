@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,30 +6,31 @@
 
 @layer base {
   :root {
-    --background: 0 0% 3%;
+    --background: 0 0% 1.4%;
     --foreground: 0 0% 88%;
-    --card: 0 0% 6%;
+    --card: 0 0% 4%;
     --card-foreground: 0 0% 88%;
-    --popover: 0 0% 6%;
+    --popover: 0 0% 4%;
     --popover-foreground: 0 0% 88%;
-    --primary: 250 50% 55%;
+    --primary: 0 0% 78%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 8%;
+    --secondary: 0 0% 7%;
     --secondary-foreground: 0 0% 70%;
-    --muted: 0 0% 10%;
+    --muted: 0 0% 9%;
     --muted-foreground: 0 0% 45%;
-    --accent: 320 45% 50%;
+    --accent: 0 0% 74%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 0 0% 12%;
     --input: 0 0% 12%;
-    --ring: 250 50% 55%;
+    --ring: 0 0% 78%;
     --radius: 0.875rem;
 
-    --vale-glow: 230 60% 55%;
-    --sui-glow: 310 50% 50%;
-    --glass-bg: 0 0% 5%;
+    /* both glows are neutral gray now */
+    --vale-glow: 0 0% 78%;
+    --sui-glow: 0 0% 78%;
+    --glass-bg: 0 0% 4%;
     --glass-border: 0 0% 14%;
   }
 }
@@ -49,6 +50,7 @@
   }
 
   html {
+    background: hsl(0 0% 1.4%);
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
@@ -58,6 +60,46 @@
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    background:
+      radial-gradient(circle at top, rgba(255, 255, 255, 0.012), transparent 32%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.12)),
+      hsl(0 0% 1.4%);
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,0.18) 0px,
+        rgba(255,255,255,0.18) 1px,
+        transparent 1px,
+        transparent 2px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,0.12) 0px,
+        rgba(255,255,255,0.12) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+    mix-blend-mode: soft-light;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(circle at 50% -10%, rgba(255,255,255,0.018), transparent 24%),
+      radial-gradient(circle at 50% 120%, rgba(255,255,255,0.012), transparent 20%);
   }
 
   h1,
@@ -74,67 +116,74 @@
 }
 
 @layer utilities {
+  .soft-display {
+    font-family: 'Manrope', 'Space Grotesk', 'Inter', sans-serif;
+    letter-spacing: -0.03em;
+  }
+
   .void-panel {
     @apply rounded-2xl border border-border/40;
-    background: hsl(0 0% 5% / 0.8);
+    background: hsl(0 0% 4% / 0.82);
     backdrop-filter: blur(20px);
   }
 
   .void-panel-hover {
     @apply void-panel transition-all duration-700 ease-out;
+    will-change: transform;
   }
 
   .void-panel-hover:hover {
-    border-color: hsl(0 0% 20% / 0.6);
-    transform: translateY(-3px);
+    border-color: hsl(0 0% 78% / 0.18);
+    transform: translateY(-4px);
   }
 
   .vale-panel:hover {
-    box-shadow: 0 0 60px -20px hsl(var(--vale-glow) / 0.15);
-    border-color: hsl(var(--vale-glow) / 0.2);
+    box-shadow:
+      0 18px 60px -28px hsl(var(--vale-glow) / 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    border-color: hsl(var(--vale-glow) / 0.18);
   }
 
   .sui-panel:hover {
-    box-shadow: 0 0 60px -20px hsl(var(--sui-glow) / 0.15);
-    border-color: hsl(var(--sui-glow) / 0.2);
+    box-shadow:
+      0 18px 60px -28px hsl(var(--sui-glow) / 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    border-color: hsl(var(--sui-glow) / 0.18);
   }
 
-  .glass-panel {
-    @apply bg-card/60 backdrop-blur-xl border border-border/50 rounded-2xl;
-    box-shadow: 0 0 40px -10px hsl(var(--primary) / 0.05);
-  }
-
-  .glass-panel-hover {
-    @apply glass-panel transition-all duration-500 ease-out;
-  }
-
-  .glass-panel-hover:hover {
-    box-shadow: 0 0 60px -10px hsl(var(--primary) / 0.1);
-    border-color: hsl(var(--primary) / 0.2);
-    transform: translateY(-2px);
+  .glass-reflection {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background:
+      linear-gradient(115deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.018) 18%, transparent 34%),
+      linear-gradient(180deg, rgba(255,255,255,0.022), transparent 24%);
+    opacity: 0.72;
+    mix-blend-mode: screen;
   }
 
   .glow-text-vale {
-    text-shadow: 0 0 30px hsl(var(--vale-glow) / 0.4);
+    text-shadow: 0 0 24px hsl(var(--vale-glow) / 0.18);
   }
 
   .glow-text-sui {
-    text-shadow: 0 0 30px hsl(var(--sui-glow) / 0.4);
+    text-shadow: 0 0 24px hsl(var(--sui-glow) / 0.18);
   }
 
   .gradient-text {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(0 0% 70%), hsl(0 0% 40%));
+    background-image: linear-gradient(135deg, hsl(0 0% 84%), hsl(0 0% 52%));
   }
 
   .gradient-text-vale {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(var(--vale-glow)), hsl(250 40% 70%));
+    background-image: linear-gradient(135deg, hsl(0 0% 88%), hsl(0 0% 62%));
   }
 
   .gradient-text-sui {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(var(--sui-glow)), hsl(330 40% 70%));
+    background-image: linear-gradient(135deg, hsl(0 0% 88%), hsl(0 0% 62%));
   }
 
   .underline-draw {
@@ -154,12 +203,85 @@
 
   .link-card {
     @apply flex items-center gap-4 p-4 rounded-xl border border-border/30 transition-all duration-500;
-    background: hsl(0 0% 5% / 0.6);
+    background: hsl(0 0% 4% / 0.62);
   }
 
   .link-card:hover {
     border-color: hsl(0 0% 20% / 0.5);
-    background: hsl(0 0% 7% / 0.8);
+    background: hsl(0 0% 6% / 0.82);
     transform: translateX(4px);
+  }
+
+  .music-shell {
+    @apply rounded-[22px] border border-border/40 p-5;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.022), transparent 30%),
+      hsl(0 0% 4% / 0.88);
+    backdrop-filter: blur(22px);
+    box-shadow:
+      0 18px 50px -30px rgba(255,255,255,0.06),
+      inset 0 1px 0 rgba(255,255,255,0.035);
+  }
+
+  .music-cover-wrap {
+    @apply relative rounded-2xl overflow-hidden;
+    box-shadow:
+      0 12px 28px -16px rgba(255,255,255,0.16),
+      0 8px 22px -18px rgba(0,0,0,0.7);
+  }
+
+  .music-cover {
+    @apply w-16 h-16 rounded-2xl object-cover border border-white/10;
+  }
+
+  .music-badge {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-[10px] uppercase tracking-[0.2em];
+    color: rgba(255,255,255,0.72);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .music-play-btn {
+    @apply w-9 h-9 rounded-full border flex items-center justify-center text-foreground transition-all duration-300;
+    border-color: rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.025);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  .music-play-btn:hover {
+    border-color: rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.045);
+    transform: translateY(-1px);
+  }
+
+  .music-progress {
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .music-progress-bar {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.34), rgba(255,255,255,0.68));
+  }
+
+  .music-pill {
+    @apply flex-shrink-0 flex items-center gap-2 p-2.5 rounded-2xl border transition-all duration-300;
+    border-color: rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .music-pill:hover {
+    border-color: rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .music-pill-active {
+    border-color: rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.05);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
   }
 }
