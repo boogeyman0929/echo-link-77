@@ -12,6 +12,8 @@ import {
 } from "@/components/icons/SocialIcons";
 
 const ease = [0.22, 1, 0.36, 1] as const;
+const NAMEPLATE_VIDEO =
+  "https://cdn.discordapp.com/assets/collectibles/nameplates/gothica/nevermore/asset.webm";
 
 const socials = [
   {
@@ -66,6 +68,16 @@ const Vale = () => {
           transition={{ duration: 0.7, delay: 0.1, ease }}
         >
           <div className="glass-reflection" />
+
+          <video
+            className="nameplate-overlay"
+            src={NAMEPLATE_VIDEO}
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
+
           <div className="flex items-center gap-5 relative z-10">
             <div className="relative">
               <img
@@ -81,7 +93,7 @@ const Vale = () => {
                 @affording
               </p>
               <p className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground/55 mt-1">
-                
+                cold light
               </p>
             </div>
           </div>
