@@ -91,7 +91,7 @@ const Vale = () => {
                 @affording
               </p>
               <p className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground/55 mt-1">
-                cold light
+                
               </p>
             </div>
           </div>
