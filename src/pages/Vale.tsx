@@ -38,7 +38,7 @@ const socials = [
 
 const projects = [
   { title: "pwncheck.wtf", tag: "tool", href: "#" },
-  { title: "lurki.ng", tag: "site", href: "https://lurki.ng/" },
+  { title: "skid.icu", tag: "site", href: "https://skid.icu/" },
 ];
 
 const Vale = () => {
